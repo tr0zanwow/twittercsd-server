@@ -25,42 +25,35 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   app
 });
 
-// app.get('/registerWebhook', (req, res) => {
-//   // async () =>{
-//   //   const promise = userActivityWebhook.register();
-//   //   const dataReceived = await promise;
-//   //   console.log(dataReceived)
-//   // }
-//   res.send("hello")
+    (async () =>{
+          const promise = userActivityWebhook.getWebhook();
+          const dataReceived = await promise;
+          console.log('Available Webhooks')
+          console.log(dataReceived)
+        })()
 
-// });
-(async () =>{
-      const promise = userActivityWebhook.getWebhook();
+    (async () =>{
+      const promise = userActivityWebhook.subscribe({
+        userId: '[TWITTER USER ID]',
+        accessToken: '[TWITTER USER ACCESS TOKEN]',
+        accessTokenSecret: '[TWITTER USER ACCESS TOKEN SECRET]'
+    })
+    .then(function (userActivity) {
+        userActivity
+        .on('favorite', (data) => console.log (userActivity.id + ' - favorite'))
+        .on ('tweet_create', (data) => console.log (userActivity.id + ' - tweet_create'))
+        .on ('follow', (data) => console.log (userActivity.id + ' - follow'))
+        .on ('mute', (data) => console.log (userActivity.id + ' - mute'))
+        .on ('revoke', (data) => console.log (userActivity.id + ' - revoke'))
+        .on ('direct_message', (data) => console.log (userActivity.id + ' - direct_message'))
+        .on ('direct_message_indicate_typing', (data) => console.log (userActivity.id + ' - direct_message_indicate_typing'))
+        .on ('direct_message_mark_read', (data) => console.log (userActivity.id + ' - direct_message_mark_read'))
+        .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
+    });
       const dataReceived = await promise;
-      console.log('Available Webhooks')
+      console.log('Subscribed User Response')
       console.log(dataReceived)
-    })()
-
-// userActivityWebhook.subscribe({
-//   userId: process.env.TWITTER_USER_ID,
-//   accessToken: process.env.TWITTER_ACCESS_TOKEN,
-//   accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-// })
-// .then(function (userActivity) {
-//   userActivity
-//   .on('favorite', (data) => console.log (userActivity.id + ' - favorite'))
-//   .on ('tweet_create', (data) => console.log (userActivity.id + ' - tweet_create'))
-//   .on ('follow', (data) => console.log (userActivity.id + ' - follow'))
-//   .on ('mute', (data) => console.log (userActivity.id + ' - mute'))
-//   .on ('revoke', (data) => console.log (userActivity.id + ' - revoke'))
-//   .on ('direct_message', (data) => console.log (userActivity.id + ' - direct_message'))
-//   .on ('direct_message_indicate_typing', (data) => console.log (userActivity.id + ' - direct_message_indicate_typing'))
-//   .on ('direct_message_mark_read', (data) => console.log (userActivity.id + ' - direct_message_mark_read'))
-//   .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
-// });
-
-// //listen to any user activity
-// userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
+        })()    
 
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
