@@ -14,7 +14,8 @@
                socket.emit('join', 'Hello World from client');
             });
             socket.on('messages', function(data) {
-                $('#future').append(document.createTextNode(data));
+                var div = document.getElementById('future');
+                div.innerHTML += data;
         });
         </script>
     </body>
