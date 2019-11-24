@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
   
   socket.on('creds',function(data){
     console.log(data)
-    users.push(data)
+    users.push(data.push(...socket.id))
     console.log(users)
   });
 
