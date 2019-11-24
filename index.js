@@ -18,10 +18,10 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   serverUrl: 'https://'+process.env.HEROKU_APP_NAME+'.herokuapp.com',
   route: '/twitter',
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
-  consumerSecret: process.env.TWITTER_CONSUMER_KEY,
-  accessToken: process.env.TWITTER_CONSUMER_KEY,
-  accessTokenSecret: process.env.TWITTER_CONSUMER_KEY,
-  environment: process.env.TWITTER_CONSUMER_KEY,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  accessToken: process.env.TWITTER_ACCESS_TOKEN,
+  accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+  environment: process.env.TWITTER_DEV_ENVIRONMENT,
   app
 });
 
@@ -35,11 +35,28 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 
 // });
 // userActivityWebhook.register();
- async () =>{
-    const promise = userActivityWebhook.getSubscriptionsCount();
-    const dataReceived = await promise;
-    console.log('Subscription Count: '+dataReceived)
-  }
+
+userActivityWebhook.subscribe({
+  userId: process.env.TWITTER_USER_ID,
+  accessToken: process.env.TWITTER_ACCESS_TOKEN,
+  accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+})
+.then(function (userActivity) {
+  userActivity
+  .on('favorite', (data) => console.log (userActivity.id + ' - favorite'))
+  .on ('tweet_create', (data) => console.log (userActivity.id + ' - tweet_create'))
+  .on ('follow', (data) => console.log (userActivity.id + ' - follow'))
+  .on ('mute', (data) => console.log (userActivity.id + ' - mute'))
+  .on ('revoke', (data) => console.log (userActivity.id + ' - revoke'))
+  .on ('direct_message', (data) => console.log (userActivity.id + ' - direct_message'))
+  .on ('direct_message_indicate_typing', (data) => console.log (userActivity.id + ' - direct_message_indicate_typing'))
+  .on ('direct_message_mark_read', (data) => console.log (userActivity.id + ' - direct_message_mark_read'))
+  .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
+});
+
+//listen to any user activity
+userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
+
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
     res.sendFile(__dirname + '/index.html');
