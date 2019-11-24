@@ -1,0 +1,30 @@
+{
+  "name": "apollo-graphql-server-node",
+  "version": "1.0.0",
+  "description": "Websocket-Subscription Based Apollo GraphQL Server For Twitter API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "serve": "nodemon index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pranil Rathod",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.9.11",
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "graphql": "^14.5.8",
+    "graphql-tools": "^4.0.6",
+    "http": "0.0.0",
+    "node-fetch": "^2.6.0",
+    "socket.io": "^2.3.0",
+    "twit": "^2.2.11",
+    "twitter-webhooks": "^0.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  }
+}
