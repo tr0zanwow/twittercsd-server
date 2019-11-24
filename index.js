@@ -39,8 +39,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
       console.log(dataReceived)
     })();
 
-    (async () =>{
-      const promise = userActivityWebhook.subscribe({
+    userActivityWebhook.subscribe({
         userId: process.env.TWITTER_USER_ID,
         accessToken: process.env.TWITTER_ACCESS_TOKEN,
         accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
@@ -57,12 +56,6 @@ const userActivityWebhook = twitterWebhooks.userActivity({
         .on ('direct_message_mark_read', (data) => console.log (userActivity.id + ' - direct_message_mark_read'))
         .on ('tweet_delete', (data) => console.log (userActivity.id + ' - tweet_delete'))
     });
-      const dataReceived = await promise;
-      console.log('Subscription Response')
-      console.log(dataReceived)
-    })();
-
-userActivityWebhook.on ('event', (event, userId, data) => console.log (event+' for user'+userId +' '+data));  
 
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
