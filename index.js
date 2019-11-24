@@ -14,7 +14,7 @@ const server = new ApolloServer({ typeDefs, resolvers,playground: {
   },
   tabs: [
     {
-      endpoint,
+      endpoint:'/playground',
       query: defaultQuery,
     },
   ],
