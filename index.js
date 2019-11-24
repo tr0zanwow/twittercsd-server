@@ -66,12 +66,18 @@ var io = socket(expressServer);
 
 io.on('connection', (socket) => {
   console.log('made socket connection', socket.id);
+  
+  socket.on('creds',function(data){
+    console.log(data)
+  });
+
   socket.on('join', function(data) {
-    console.log(data);
+  
     userActivityWebhook.on ('event',function (event, userId, data){ 
       console.log (data)
-      socket.emit('messages', data);
+      
     });
+
 });
   socket.on('disconnect', () => {
       console.log('disconnected connection', socket.id);
