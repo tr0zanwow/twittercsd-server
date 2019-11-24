@@ -29,7 +29,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     (async () =>{
       const promise = userActivityWebhook.register();
       const dataReceived = await promise;
-      console.log('Available Webhooks')
+      console.log('Register Webhooks')
       console.log(dataReceived)
     })();
 
