@@ -25,16 +25,21 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   app
 });
 
-app.get('/registerWebhook', (req, res) => {
-  // async () =>{
-  //   const promise = userActivityWebhook.register();
-  //   const dataReceived = await promise;
-  //   console.log(dataReceived)
-  // }
-  res.send("hello")
+// app.get('/registerWebhook', (req, res) => {
+//   // async () =>{
+//   //   const promise = userActivityWebhook.register();
+//   //   const dataReceived = await promise;
+//   //   console.log(dataReceived)
+//   // }
+//   res.send("hello")
 
-});
-userActivityWebhook.register();
+// });
+// userActivityWebhook.register();
+ async () =>{
+    const promise = userActivityWebhook.getSubscriptionsCount();
+    const dataReceived = await promise;
+    console.log('Subscription Count: '+dataReceived)
+  }
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
     res.sendFile(__dirname + '/index.html');
