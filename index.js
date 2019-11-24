@@ -7,10 +7,10 @@ const resolvers = require('./resolvers.js')
 const cors = require('cors')
 const app = express();
 const socket = require('socket.io')
-const http = require("http");
+const https = require("https");
 
 setInterval(function() {
-  http.get("https://apollo-graphql-socket-node.herokuapp.com/");
+  https.get("https://apollo-graphql-socket-node.herokuapp.com/");
 }, 300000);
 
 const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
       socket.emit('messages', data);
     });
 });
-  socket.on('disconnect', (data) => {
+  socket.on('disconnect', () => {
       console.log('disconnected connection', socket.id);
     });
   });
