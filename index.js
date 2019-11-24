@@ -8,18 +8,7 @@ const cors = require('cors')
 const app = express();
 const socket = require('socket.io')
 
-const server = new ApolloServer({ typeDefs, resolvers,playground: {
-  settings: {
-    'editor.theme': 'dark',
-  },
-  tabs: [
-    {
-      endpoint:'/playground',
-      query: defaultQuery,
-    },
-  ],
-},
-});
+const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
 
 app.use(bodyParser.json());
 
