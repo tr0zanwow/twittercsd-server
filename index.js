@@ -9,6 +9,41 @@ const app = express();
 const socket = require('socket.io')
 const { Autohook } = require('twitter-autohook');
 
+const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
+
+app.use(bodyParser.json());
+
+app.use(cors({ origin: '*'}));
+
+// const userActivityWebhook = twitterWebhooks.userActivity({
+//   serverUrl: 'https://'+process.env.HEROKU_APP_NAME+'.herokuapp.com',
+//   route: '/twitter',
+//   consumerKey: process.env.TWITTER_CONSUMER_KEY,
+//   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+//   accessToken: process.env.TWITTER_ACCESS_TOKEN,
+//   accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
+//   environment: process.env.TWITTER_DEV_ENVIRONMENT,
+//   app
+// });
+
+//     (async () =>{
+//           const promise = userActivityWebhook.getWebhook();
+//           const dataReceived = await promise;
+//           console.log('Available Webhooks')
+//           console.log(dataReceived)
+//         })();
+
+//     (async () =>{
+//       const promise = userActivityWebhook.getSubscriptions();
+//       const dataReceived = await promise;
+//       console.log('Available Subscriptions')
+//       console.log(dataReceived)
+//     })();
+
+//     (() =>{
+//       userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
+//     })();
+
 (async ƛ => {
   const webhook = new Autohook();
   
@@ -20,41 +55,6 @@ const { Autohook } = require('twitter-autohook');
   
   await webhook.subscribe({oauth_token, oauth_token_secret});
 })();
-
-const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
-
-app.use(bodyParser.json());
-
-app.use(cors({ origin: '*'}));
-
-const userActivityWebhook = twitterWebhooks.userActivity({
-  serverUrl: 'https://'+process.env.HEROKU_APP_NAME+'.herokuapp.com',
-  route: '/twitter',
-  consumerKey: process.env.TWITTER_CONSUMER_KEY,
-  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-  accessToken: process.env.TWITTER_ACCESS_TOKEN,
-  accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-  environment: process.env.TWITTER_DEV_ENVIRONMENT,
-  app
-});
-
-    (async () =>{
-          const promise = userActivityWebhook.getWebhook();
-          const dataReceived = await promise;
-          console.log('Available Webhooks')
-          console.log(dataReceived)
-        })();
-
-    (async () =>{
-      const promise = userActivityWebhook.getSubscriptions();
-      const dataReceived = await promise;
-      console.log('Available Subscriptions')
-      console.log(dataReceived)
-    })();
-
-    (() =>{
-      userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
-    })();
 
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
