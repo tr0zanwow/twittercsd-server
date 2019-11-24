@@ -25,7 +25,6 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   app
 });
 
-
     // (async () =>{
     //       const promise = userActivityWebhook.register();
     //       const dataReceived = await promise;
@@ -33,22 +32,22 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     //       console.log(dataReceived)
     // })();
 
-    (async () =>{
-          const promise = userActivityWebhook.getWebhook();
-          const dataReceived = await promise;
-          console.log('Available Webhooks')
-          console.log(dataReceived)
-        })();
+    // (async () =>{
+    //       const promise = userActivityWebhook.getWebhook();
+    //       const dataReceived = await promise;
+    //       console.log('Available Webhooks')
+    //       console.log(dataReceived)
+    //     })();
 
-    (async () =>{
-      const promise = userActivityWebhook.getSubscriptions();
-      const dataReceived = await promise;
-      console.log('Available Subscriptions')
-      console.log(dataReceived)
-    })();
+    // (async () =>{
+    //   const promise = userActivityWebhook.getSubscriptions();
+    //   const dataReceived = await promise;
+    //   console.log('Available Subscriptions')
+    //   console.log(dataReceived)
+    // })();
 
     userActivityWebhook.on ('event',function (event, userId, data){ 
-      console.log (userId + ' - favorite')
+      console.log (data)
     });
 
 app.use(express.static(__dirname + '/node_modules'));
