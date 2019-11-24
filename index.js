@@ -36,9 +36,8 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 // });
 
       const promise = userActivityWebhook.getWebhook();
-      const dataReceived = await promise;
       console.log('Available Webhooks')
-      console.log(dataReceived)
+      console.log(promise)
     
 // userActivityWebhook.subscribe({
 //   userId: process.env.TWITTER_USER_ID,
