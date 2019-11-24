@@ -48,7 +48,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     })();
 
     // (() =>{
-    //   userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
+      userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
     // })();
 
 app.use(express.static(__dirname + '/node_modules'));
