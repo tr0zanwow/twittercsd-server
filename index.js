@@ -30,7 +30,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
           const dataReceived = await promise;
           console.log('Available Webhooks')
           console.log(dataReceived)
-        })()
+        })();
 
     (async () =>{
       const promise = userActivityWebhook.subscribe({
@@ -53,7 +53,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
       const dataReceived = await promise;
       console.log('Subscribed User Response')
       console.log(dataReceived)
-        })()    
+        })(); 
 
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
