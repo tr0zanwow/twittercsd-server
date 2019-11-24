@@ -32,6 +32,13 @@ const userActivityWebhook = twitterWebhooks.userActivity({
           console.log(dataReceived)
         })();
 
+    (async () =>{
+      const promise = userActivityWebhook.getSubscriptions();
+      const dataReceived = await promise;
+      console.log('Available Webhooks')
+      console.log(dataReceived)
+    })();
+
 userActivityWebhook.on ('event', (event, userId, data) => console.log (event+' for user'+userId +' '+data));  
 
 app.use(express.static(__dirname + '/node_modules'));
