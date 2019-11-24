@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
   socket.on('creds',function(data){
     console.log(data)
     var temp = data;
-    temp.unshift(...socket.id)
+    temp.push(...socket.id)
     users.push(temp)
     console.log(temp)
   });
