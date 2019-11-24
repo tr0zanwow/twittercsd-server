@@ -35,7 +35,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     (async () =>{
       const promise = userActivityWebhook.getSubscriptions();
       const dataReceived = await promise;
-      console.log('Available Webhooks')
+      console.log('Available Subscriptions')
       console.log(dataReceived)
     })();
 
