@@ -34,9 +34,9 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 
     (async () =>{
       const promise = userActivityWebhook.subscribe({
-        userId: '[TWITTER USER ID]',
-        accessToken: '[TWITTER USER ACCESS TOKEN]',
-        accessTokenSecret: '[TWITTER USER ACCESS TOKEN SECRET]'
+        userId: process.env.TWITTER_USER_ID,
+        accessToken: process.env.TWITTER_ACCESS_TOKEN,
+        accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
     })
     .then(function (userActivity) {
         userActivity
