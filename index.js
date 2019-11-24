@@ -7,6 +7,19 @@ const resolvers = require('./resolvers.js')
 const cors = require('cors')
 const app = express();
 const socket = require('socket.io')
+const { Autohook } = require('twitter-autohook');
+
+(async ƛ => {
+  const webhook = new Autohook();
+  
+  await webhook.removeWebhooks();
+  
+  webhook.on('event', event => console.log('Something happened:', event));
+  
+  await webhook.start();
+  
+  await webhook.subscribe({oauth_token, oauth_token_secret});
+})();
 
 const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
 
