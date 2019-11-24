@@ -39,8 +39,8 @@ const userActivityWebhook = twitterWebhooks.userActivity({
       console.log(dataReceived)
     })();
 
-    (async () =>{
-      await userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' Event Occured'));
+    (() =>{
+      userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
     })();
 
 app.use(express.static(__dirname + '/node_modules'));
