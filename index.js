@@ -8,6 +8,7 @@ const cors = require('cors')
 const app = express();
 const socket = require('socket.io')
 const https = require("https");
+var users = [];
 
 setInterval(function() {
   https.get("https://apollo-graphql-socket-node.herokuapp.com/");
@@ -69,16 +70,17 @@ io.on('connection', (socket) => {
   
   socket.on('creds',function(data){
     console.log(data)
+    var temp = data;
+    temp.unshift(...socket.id)
+    users.push(temp)
+    console.log(temp)
   });
 
-  socket.on('join', function(data) {
-  
-    userActivityWebhook.on ('event',function (event, userId, data){ 
-      console.log (data)
-      
-    });
-
-});
+  userActivityWebhook.on ('event',function (event, userId, data){ 
+    console.log (data)
+    
+  });
+ 
   socket.on('disconnect', () => {
       console.log('disconnected connection', socket.id);
     });
