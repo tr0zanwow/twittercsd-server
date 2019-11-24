@@ -34,11 +34,14 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 //   res.send("hello")
 
 // });
-
-      const promise = userActivityWebhook.getWebhook();
-      console.log('Available Webhooks')
-      console.log(promise)
-    
+var promise;
+var dataReceived;
+async () =>{
+      promise = userActivityWebhook.getWebhook();
+      dataReceived = await promise;
+    }
+console.log("Available Webhooks: ")
+console.log(dataReceived)
 // userActivityWebhook.subscribe({
 //   userId: process.env.TWITTER_USER_ID,
 //   accessToken: process.env.TWITTER_ACCESS_TOKEN,
