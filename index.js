@@ -78,7 +78,7 @@ io.on('connection', (socket) => {
       socket.emit('messages', data);
     });
 });
-  socket.on('disconnect', (socket) => {
+  socket.on('disconnect', (data) => {
       console.log('disconnected connection', socket.id);
     });
   });
