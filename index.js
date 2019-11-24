@@ -27,10 +27,10 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 
 
     (async () =>{
-      const promise = userActivityWebhook.register();
-      const dataReceived = await promise;
-      console.log('Register Webhooks')
-      console.log(dataReceived)
+          const promise = userActivityWebhook.register();
+          const dataReceived = await promise;
+          console.log('Register Webhooks')
+          console.log(dataReceived)
     })();
 
     (async () =>{
@@ -47,9 +47,9 @@ const userActivityWebhook = twitterWebhooks.userActivity({
       console.log(dataReceived)
     })();
 
-    (() =>{
-      userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
-    })();
+    // (() =>{
+    //   userActivityWebhook.on ('event', (event, userId, data) => console.log (userId + ' - favorite'));
+    // })();
 
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
