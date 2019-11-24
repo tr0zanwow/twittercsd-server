@@ -41,6 +41,17 @@ const userActivityWebhook = twitterWebhooks.userActivity({
         })();
 
     (async () =>{
+      const promise = userActivityWebhook.userActivityWebhook.subscribe({
+        userId: process.env.TWITTER_USER_ID,
+        accessToken: process.env.TWITTER_ACCESS_TOKEN,
+        accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+    });
+      const dataReceived = await promise;
+      console.log('Subscriptions Response')
+      console.log(dataReceived)
+    })();    
+
+    (async () =>{
       const promise = userActivityWebhook.getSubscriptions();
       const dataReceived = await promise;
       console.log('Available Subscriptions')
