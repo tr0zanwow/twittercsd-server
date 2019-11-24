@@ -46,9 +46,6 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     //   console.log(dataReceived)
     // })();
 
-    userActivityWebhook.on ('event',function (event, userId, data){ 
-      console.log (data)
-    });
 
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
@@ -71,7 +68,10 @@ io.on('connection', (socket) => {
   console.log('made socket connection', socket.id);
   socket.on('join', function(data) {
     console.log(data);
-    socket.emit('messages', 'Hello from server');
+    userActivityWebhook.on ('event',function (event, userId, data){ 
+      console.log (data)
+      socket.emit('messages', event);
+    });
 });
 });
 
