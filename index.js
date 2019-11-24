@@ -7,6 +7,11 @@ const resolvers = require('./resolvers.js')
 const cors = require('cors')
 const app = express();
 const socket = require('socket.io')
+const http = require("http");
+
+setInterval(function() {
+  http.get("https://apollo-graphql-socket-node.herokuapp.com/");
+}, 300000);
 
 const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
 
@@ -70,7 +75,7 @@ io.on('connection', (socket) => {
     console.log(data);
     userActivityWebhook.on ('event',function (event, userId, data){ 
       console.log (data)
-      socket.emit('messages', event);
+      socket.emit('messages', data);
     });
 });
 });

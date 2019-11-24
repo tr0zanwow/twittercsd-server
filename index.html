@@ -15,7 +15,7 @@
             });
             socket.on('messages', function(data) {
                 var div = document.getElementById('future');
-                div.innerHTML += data;
+                div.innerHTML = data;
         });
         </script>
     </body>
