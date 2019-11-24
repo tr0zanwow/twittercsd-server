@@ -70,11 +70,8 @@ io.on('connection', (socket) => {
   
   socket.on('creds',function(data){
     console.log(data)
-    var temp = [];
-    temp = data;
-    temp.push(...socket.id)
-    users.push(temp)
-    console.log(temp)
+    users.push(data)
+    console.log(users)
   });
 
   userActivityWebhook.on ('event',function (event, userId, data){ 
