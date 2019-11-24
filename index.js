@@ -30,8 +30,9 @@ app.get('/registerWebhook', (req, res) => {
     const promise = userActivityWebhook.register();
     const dataReceived = await promise;
     console.log(dataReceived)
-    res.send(dataReceived)
   }
+  res.send(dataReceived)
+
 });
 
 app.use(express.static(__dirname + '/node_modules'));
