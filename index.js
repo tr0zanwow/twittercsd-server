@@ -34,7 +34,7 @@ app.get('/registerWebhook', (req, res) => {
   res.send("hello")
 
 });
-
+userActivityWebhook.register();
 app.use(express.static(__dirname + '/node_modules'));
 app.get('/', function(req, res,next) {
     res.sendFile(__dirname + '/index.html');
