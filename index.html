@@ -10,9 +10,11 @@
         <script src="/socket.io/socket.io.js"></script>
         <script>
             var socket = io.connect('https://apollo-graphql-socket-node.herokuapp.com/',{
-                'reconnection': true,
-                'reconnectionDelay': 500,
-                'reconnectionAttempts': Infinity
+                reconnection: true,
+                reconnectionDelay: 500,
+                reconnectionAttempts: Infinity,
+                pingInterval: 25000,
+                pingTimeout: 60000,
                 });
             socket.on('connect', function(data) {
                socket.emit('join', 'Hello World from client');
