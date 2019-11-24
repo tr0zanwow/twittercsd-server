@@ -47,7 +47,7 @@ app.use(cors({ origin: '*'}));
 (async ƛ => {
   const webhook = new Autohook();
   
-  await webhook.removeWebhooks();
+  // await webhook.removeWebhooks();
   
   webhook.on('event', event => console.log('Something happened:', event));
   
