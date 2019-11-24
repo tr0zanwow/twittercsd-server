@@ -52,11 +52,6 @@ const userActivityWebhook = twitterWebhooks.userActivity({
     // })();
 
 
-app.use(express.static(__dirname + '/node_modules'));
-app.get('/', function(req, res,next) {
-    res.sendFile(__dirname + '/index.html');
-});
-
 server.applyMiddleware({ app });
 
 const PORT = process.env.PORT || 4000;
