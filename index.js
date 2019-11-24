@@ -70,7 +70,13 @@ io.on('connection', (socket) => {
   
   socket.on('creds',function(data){
     console.log(data)
-    users.push(data.push(...socket.id))
+    const temp = {
+      socketID = socket.id,
+      twitterID = data.userTwitterId,
+      accessToken = data.access_token,
+      accessTokenSecret = data.access_secret
+    }
+    users.push(temp)
     console.log(users)
   });
 
