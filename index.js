@@ -27,6 +27,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 
 app.get('/registerWebhook', (req, res) => {
   let promise = userActivityWebhook.register();
+  console.log(promise)
   res.send(promise)
 });
 
