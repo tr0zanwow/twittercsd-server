@@ -66,11 +66,19 @@ const expressServer = app.listen(PORT, () => {
 var io = socket(expressServer);
 
 io.on('connection', (socket) => {
-  console.log('made socket connection', socket.id);
+  console.log('Client connected on socket with ID:', socket.id);
   
   userActivityWebhook.on('event',function (event, userId, data){ 
     console.log(event)
-    socket.emit('eventOccured',event);
+    if(users.find(x => x.twitterID === userId)){
+      var tempIndx = users.findIndex(x => x.twitterID === data.userTwitterId);
+      var sID = users[tempIndx].socketID;
+      io.to(sID).emit('eventOccured',event);
+    }
+  });
+
+  socket.on('disconnect',function(){
+    console.log('Client disconnected with ID:', socket.id);
   });
 
   socket.on('creds',function(data){
