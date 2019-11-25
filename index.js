@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
   userActivityWebhook.on('event',function (event, userId, data){ 
     if(users.find(x => x.twitterID === userId)){
       var tempIndx = users.findIndex(x => x.twitterID === userId);
-      io.connected(users[tempIndx].socketID).emit('eventOccured',event);
+      io.to(users[tempIndx].socketID).emit('eventOccured',event);
     }
   });
 
