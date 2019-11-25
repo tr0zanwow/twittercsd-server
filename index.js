@@ -98,7 +98,7 @@ io.on('connection', (socket) => {
   });
 
   userActivityWebhook.on ('event',function (event, userId, data){ 
-    socket.emmit('eventOccured',data)
+    socket.emmit('eventOccured',event);
   });
  
   socket.on('disconnect', () => {
