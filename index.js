@@ -31,20 +31,6 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   app
 });
 
-app.get('/removeSubs',(req,res)=>{
-  var i=0;
-  for(i=0;i<users.length;i++){
-    (async function() {
-      await userActivityWebhook.unsubscribe({
-        userId: users[i].userId,
-        accessToken: users[i].accessToken,
-        accessTokenSecret: users[i].accessTokenSecret
-    }).then(function (userActivity) {});
-  })();
-  }
-  console.log("removed all users")
-});
-
 server.applyMiddleware({ app });
 
 const PORT = process.env.PORT || 4000;
