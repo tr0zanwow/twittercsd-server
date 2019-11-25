@@ -31,6 +31,20 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   app
 });
 
+app.get('/removeSubs',(req,res)=>{
+  var i=0;
+  for(i=0;i<users.length;i++){
+    (async function() {
+      await userActivityWebhook.unsubscribe({
+        userId: users[i].userId,
+        accessToken: users[i].accessToken,
+        accessTokenSecret: users[i].accessTokenSecret
+    }).then(function (userActivity) {});
+  })();
+  }
+  console.log("removed all users")
+});
+
 server.applyMiddleware({ app });
 
 const PORT = process.env.PORT || 4000;
@@ -61,6 +75,7 @@ io.on('connection', (socket) => {
       //     followers_count: data.user.followers_count,
       //     statuses_count: data.user.statuses_count,
       // };
+      console.log(event)
       io.to(users[tempIndx].socketID).emit('eventOccured',event);
       // io.to(users[tempIndx].socketID).emit('normalizedUserData',tweetUserNormalized);
     }
