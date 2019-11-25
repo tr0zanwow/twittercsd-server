@@ -71,7 +71,11 @@ io.on('connection', (socket) => {
   userActivityWebhook.on('event',function (event, userId, data){ 
     if(users.find(x => x.twitterID === userId)){
       var tempIndx = users.findIndex(x => x.twitterID === userId);
-      io.to(users[tempIndx].socketID).emit('eventOccured',event);
+      const payload = {
+        eventType: event,
+        eventData: data
+      }
+      io.to(users[tempIndx].socketID).emit('eventOccured',payload);
     }
   });
 
