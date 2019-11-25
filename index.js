@@ -71,8 +71,8 @@ io.on('connection', (socket) => {
     console.log(data);
     socket.emit('messages', 'Hello from server');
 });
-  userActivityWebhook.on ('event',function (event, userId, data){ 
-    socket.emmit('eventOccured',event);
+  userActivityWebhook.on('event',function (event, userId, data){ 
+    io.to(users[0].socketID).emmit('eventOccured',event);
     console.log('Event Triggered')
   });
   
