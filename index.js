@@ -69,14 +69,9 @@ io.on('connection', (socket) => {
   console.log('Client connected on socket with ID:', socket.id);
   
   userActivityWebhook.on('event',function (event, userId, data){ 
-    console.log('Event Triggered :'+event)
-    console.log('For UID :'+userId)
     if(users.find(x => x.twitterID === userId)){
-      console.log('Match Found for UID : '+userId)
       var tempIndx = users.findIndex(x => x.twitterID === userId);
-      console.log('Index : '+tempIndx)
-      console.log('Socket ID: '+users[tempIndx].socketID);
-      // io.connected(users[tempIndx].socketID).emit('eventOccured',event);
+      io.connected(users[tempIndx].socketID).emit('eventOccured',event);
     }
   });
 
