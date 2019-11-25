@@ -68,6 +68,11 @@ var io = socket(expressServer);
 io.on('connection', (socket) => {
   console.log('made socket connection', socket.id);
   
+  userActivityWebhook.on('event',function (event, userId, data){ 
+    console.log(event)
+    socket.emit('eventOccured',tempTweetData);
+  });
+
   socket.on('creds',function(data){
     console.log(data)
     const temp = {
@@ -90,20 +95,9 @@ io.on('connection', (socket) => {
         userId: data.userTwitterId,
         accessToken: data.access_token,
         accessTokenSecret: data.access_secret
-    })
-    .then(function (userActivity) {
-        
-    });
-      })();
-  });
-  var tempTweetData = "";
-  userActivityWebhook.on('event',function (event, userId, data){ 
-    console.log(event)
-    tempTweetData = event;
-  });
-  socket.emmit('eventOccured',tempTweetData);
+    }).then(function (userActivity) {});
+  })();
 
-  socket.on('disconnect', () => {
-      console.log('disconnected connection', socket.id);
-    });
+  });
+  
   });
