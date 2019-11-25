@@ -23,7 +23,7 @@ const client = new Twit({
     getTimeline: {
       async resolve(_,args) {
         let promise = new Promise((resolve, reject) => {
-          client.get('user_timeline', { [args.identifier]:args.value,count: args.count, tweet_mode: 'extended'}, (err, data, response)=>resolve(data.statuses))
+          client.get('user_timeline', { [args.identifier]:args.value,count: args.count}, (err, data, response)=>resolve(data))
         });
         const timeLineData = await promise
         console.log(timeLineData)
