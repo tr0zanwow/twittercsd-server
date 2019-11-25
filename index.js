@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
   else{
       users.push(temp)
   }
-    console.log(users)
+    console.log(users);
 
     (async function() {
       await userActivityWebhook.subscribe({
