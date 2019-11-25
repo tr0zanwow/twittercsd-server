@@ -80,7 +80,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('creds',function(data){
-    console.log(data)
     const temp = {
       socketID : socket.id,
       twitterID : data.userTwitterId,
