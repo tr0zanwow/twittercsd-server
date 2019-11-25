@@ -23,7 +23,15 @@ const client = new Twit({
     getTimeline: {
       async resolve(_,args) {
         let promise = new Promise((resolve, reject) => {
-          client.get('statuses/user_timeline', { [args.identifier]:args.value,count: args.count, tweet_mode: 'extended'}, (err, data, response)=>resolve(data))
+          const tClient = new Twit({
+            consumer_key:         'jC5tNNJX78KEsIG8EQRGF4KTd',
+            consumer_secret:      'u4AE7ImFH0VZCTbdUWQqvIrYdEzcUFPwcxhFcyH0Wm8CCio1wW',
+            access_token:          args.access_token,
+            access_token_secret:   args.access_token_secret,
+            timeout_ms:           60*1000,
+            strictSSL:            true,
+            });
+            tClient.get('statuses/user_timeline', { [args.identifier]:args.value,count: args.count, tweet_mode: 'extended'}, (err, data, response)=>resolve(data))
         });
         const timeLineData = await promise
         console.log(timeLineData)
