@@ -68,11 +68,6 @@ var io = socket(expressServer);
 io.on('connection', (socket) => {
   console.log('made socket connection', socket.id);
   
-  userActivityWebhook.on ('event',function (event, userId, data){ 
-      io.emmit('eventOccured',event);
-    console.log('Event Triggered')
-  });
-  
   socket.on('creds',function(data){
     console.log(data)
     const temp = {
@@ -100,6 +95,11 @@ io.on('connection', (socket) => {
         
     });
       })();
+  });
+
+  userActivityWebhook.on('event',function (event, userId, data){ 
+    console.log(event)
+    socket.emmit('eventOccured',event);
   });
 
   socket.on('disconnect', () => {
