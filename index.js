@@ -96,11 +96,12 @@ io.on('connection', (socket) => {
     });
       })();
   });
-
+  var tempTweetData = "";
   userActivityWebhook.on('event',function (event, userId, data){ 
     console.log(event)
-    socket.emmit('eventOccured',event);
+    tempTweetData = event;
   });
+  socket.emmit('eventOccured',tempTweetData);
 
   socket.on('disconnect', () => {
       console.log('disconnected connection', socket.id);
