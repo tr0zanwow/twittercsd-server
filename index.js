@@ -70,6 +70,8 @@ io.on('connection', (socket) => {
   
   userActivityWebhook.on('event',function (event, userId, data){ 
     console.log(event)
+    console.log(userId)
+    console.log(users[0].twitterID)
     if(users.find(x => x.twitterID == userId)){
       console.log('id matched')
       var tempIndx = users.findIndex(x => x.twitterID === data.userTwitterId);
