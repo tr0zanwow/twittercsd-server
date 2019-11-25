@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
   
   userActivityWebhook.on('event',function (event, userId, data){ 
     console.log(event)
-    socket.emit('eventOccured',tempTweetData);
+    socket.emit('eventOccured',event);
   });
 
   socket.on('creds',function(data){
