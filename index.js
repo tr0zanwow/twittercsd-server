@@ -99,6 +99,7 @@ io.on('connection', (socket) => {
 
   userActivityWebhook.on ('event',function (event, userId, data){ 
     socket.emmit('eventOccured',event);
+    console.log('Event Triggered')
   });
  
   socket.on('disconnect', () => {
