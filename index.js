@@ -85,16 +85,16 @@ io.on('connection', (socket) => {
   }
     console.log(users)
 
-    // (async () =>{
-    //   await userActivityWebhook.subscribe({
-    //     userId: data.userTwitterId,
-    //     accessToken: data.access_token,
-    //     accessTokenSecret: data.access_secret
-    // })
-    // .then(function (userActivity) {
+    (async function() {
+      await userActivityWebhook.subscribe({
+        userId: data.userTwitterId,
+        accessToken: data.access_token,
+        accessTokenSecret: data.access_secret
+    })
+    .then(function (userActivity) {
         
-    // });
-    //   })();
+    });
+      })();
   });
 
   userActivityWebhook.on ('event',function (event, userId, data){ 
