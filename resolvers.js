@@ -20,6 +20,15 @@ const client = new Twit({
           return searchData;
       }
     },
+    getTimeline: {
+      async resolve(_,args) {
+        let promise = new Promise((resolve, reject) => {
+          client.get('user_timeline', { [args.identifier]:args.value,tweet_mode: 'extended'}, (err, data, response)=>resolve(data))
+        });
+        const timeLineData = await promise
+        return timeLineData;
+    }
+  },
       user: {
         async resolve(_,args) {
           let promise = new Promise((resolve, reject) => {
