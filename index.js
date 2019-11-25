@@ -76,7 +76,13 @@ io.on('connection', (socket) => {
       accessToken : data.access_token,
       accessTokenSecret : data.access_secret
     }
-    users.push(temp)
+    if(users.find(x => x.twitterID === data.userTwitterId)){
+      var index1 = users.findIndex(x => x.twitterID === data.userTwitterId);
+      users[index1] = temp;
+  }
+  else{
+      users.push(temp)
+  }
     console.log(users)
   });
 
