@@ -49,18 +49,7 @@ io.on('connection', (socket) => {
   userActivityWebhook.on('event',function (event, userId, data){ 
     if(users.find(x => x.twitterID === userId)){
       var tempIndx = users.findIndex(x => x.twitterID === userId);
-      // const payload = {
-      //   eventType: event,
-      //   eventData: data
-      // };
-      // const tweetUserNormalized = {
-      //     id_str: data.user.id_str,
-      //     name: data.user.name,
-      //     screen_name: data.user.screen_name,
-      //     profile_image_url_https: data.user.profile_image_url_https,
-      //     followers_count: data.user.followers_count,
-      //     statuses_count: data.user.statuses_count,
-      // };
+      
       console.log(event)
       io.to(users[tempIndx].socketID).emit('eventOccured',event);
       // io.to(users[tempIndx].socketID).emit('normalizedUserData',tweetUserNormalized);
