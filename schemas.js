@@ -11,7 +11,7 @@ const typeDefs = gql`
     }
 
     type Subscription{
-      searchSub(id:String): Tweets
+      searchSub(id:String): [Tweets]
     }
 
     enum IdentityType{
