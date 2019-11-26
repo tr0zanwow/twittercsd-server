@@ -10,6 +10,7 @@ const https = require("https");
 const http = require('http');
 
 const pubsub = new PubSub();
+const PORT = 4000;
 
 const NEW_TWEET = 'NEW_TWEET';
 
@@ -136,7 +137,7 @@ server.applyMiddleware({ app });
 const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT || process.env.PORT, () => {
   console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
   console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`)
 })
