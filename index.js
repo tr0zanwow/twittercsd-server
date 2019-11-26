@@ -7,6 +7,7 @@ const cors = require("cors");
 const twitInstance = require("./twitInstance");
 const app = express();
 const https = require("https");
+const http = require('http');
 
 const pubsub = new PubSub();
 const PORT = 4000;
@@ -134,7 +135,7 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-const httpServer = https.createServer(app);
+const httpServer = http.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
 httpServer.listen(process.env.PORT || 4000, () => {})
