@@ -122,6 +122,7 @@ const resolvers = {
 };
 
 userActivityWebhook.on("event", function(event, userId, data) {
+      console.log(data);
       pubsub.publish(NEW_TWEET, { searchSub: data });
 });
 
