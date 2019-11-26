@@ -7,7 +7,6 @@ const cors = require("cors");
 const twitInstance = require("./twitInstance");
 const app = express();
 const https = require("https");
-const http = require('http');
 
 const pubsub = new PubSub();
 const PORT = 4000;
@@ -115,7 +114,7 @@ const resolvers = {
     }
   },
   Subscription:{
-    searchSub: {
+    tweetCreateSub: {
       subscribe: ()=> pubsub.asyncIterator([NEW_TWEET])
     }
   }
@@ -123,7 +122,7 @@ const resolvers = {
 
 userActivityWebhook.on("event", function(event, userId, data) {
       console.log(data);
-      pubsub.publish(NEW_TWEET, { searchSub: data });
+      pubsub.publish(NEW_TWEET, { tweetCreateSub: data });
 });
 
 const server = new ApolloServer({
@@ -135,10 +134,7 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-const httpServer = http.createServer(app);
+const httpServer = https.createServer(app);
 server.installSubscriptionHandlers(httpServer);
 
-httpServer.listen(process.env.PORT || 4000, () => {
-  // console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
-  // console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`)
-})
+httpServer.listen(process.env.PORT || 4000, () => {})
