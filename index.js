@@ -7,6 +7,7 @@ const cors = require("cors");
 const twitInstance = require("./twitInstance");
 const app = express();
 const https = require("https");
+const http = require('http');
 
 const pubsub = new PubSub();
 
@@ -132,10 +133,10 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-const PORT = process.env.PORT || 4000;
-const expressServer = app.listen(PORT, () => {
-  let host = expressServer.address().address;
-  let port = expressServer.address().port;
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
-  console.log(`Listening at http://${host}:${port}`);
-});
+httpServer.listen(PORT, () => {
+  console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`)
+  console.log(`🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`)
+})
