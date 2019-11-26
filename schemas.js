@@ -10,6 +10,10 @@ const typeDefs = gql`
       postTweet(statusText: String!, inReplyToID: String!, access_token: String!, access_token_secret: String!): Tweets
     }
 
+    type Subscription{
+      searchSub(): [Tweets]
+    }
+
     enum IdentityType{
       user_id
       screen_name
