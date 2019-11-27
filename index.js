@@ -6,6 +6,7 @@ const typeDefs = require("./schemas.js");
 const cors = require("cors");
 const twitInstance = require("./twitInstance");
 const app = express();
+const Twit = require('twit');
 const https = require("https");
 const http = require('http');
 
