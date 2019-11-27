@@ -13,6 +13,7 @@ const pubsub = new PubSub();
 const PORT = 4000;
 
 const NEW_TWEET = 'NEW_TWEET';
+const DELETE_TWEET = 'DELETE_TWEET';
 
 setInterval(function() {
   https.get("https://apollo-graphql-socket-node.herokuapp.com/");
@@ -117,6 +118,9 @@ const resolvers = {
   Subscription:{
     tweetCreateSub: {
       subscribe: ()=> pubsub.asyncIterator([NEW_TWEET])
+    },
+    tweetDeleteSub:{
+      subscribe: ()=> pubsub.asyncIterator([DELETE_TWEET])
     }
   }
 };
@@ -125,6 +129,9 @@ userActivityWebhook.on("event", function(event, userId, data) {
     if(event == 'tweet_create'){
       console.log(data);
       pubsub.publish(NEW_TWEET, { tweetCreateSub: data });
+    }
+    else if(event == 'tweet_delete'){
+      pubsub.publish(DELETE_TWEET, { tweetDeleteSub: data.status });
     }
     });
 

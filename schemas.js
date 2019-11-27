@@ -12,11 +12,17 @@ const typeDefs = gql`
 
     type Subscription{
       tweetCreateSub(id:String): Tweets
+      tweetDeleteSub(id:String): Status
     }
 
     enum IdentityType{
       user_id
       screen_name
+    }
+
+    type Status{
+      id: String
+      user_id: String
     }
 
     type User {
