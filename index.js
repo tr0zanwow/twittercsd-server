@@ -122,9 +122,11 @@ const resolvers = {
 };
 
 userActivityWebhook.on("event", function(event, userId, data) {
+    if(event == 'tweet_create'){
       console.log(data);
       pubsub.publish(NEW_TWEET, { tweetCreateSub: data });
-});
+    }
+    });
 
 const server = new ApolloServer({
   typeDefs,
