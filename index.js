@@ -20,11 +20,8 @@ setInterval(function() {
 
 app.use(bodyParser.json());
 
-app.use(express.static('public', {
-  setHeaders: function setHeaders(res, path, stat) {
-    res.header('Access-Control-Allow-Origin', '*');
-  }
-}));
+app.use(cors());
+
 const userActivityWebhook = twitterWebhooks.userActivity({
   serverUrl: "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com",
   route: "/twitter",
