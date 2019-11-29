@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const twitterWebhooks = require("twitter-webhooks");
-const { ApolloServer, PubSub } = require("apollo-server-express");
+const { ApolloServer, PubSub, withFilter } = require("apollo-server-express");
 const typeDefs = require("./schemas.js");
 const cors = require("cors");
 const twitInstance = require("./twitInstance");
@@ -11,7 +11,6 @@ const https = require("https");
 const http = require('http');
 
 const pubsub = new PubSub();
-const PORT = 4000;
 
 const NEW_TWEET = 'NEW_TWEET';
 const DELETE_TWEET = 'DELETE_TWEET';
@@ -118,8 +117,13 @@ const resolvers = {
   },
   Subscription:{
     tweetCreateSub: {
-      subscribe: ()=> pubsub.asyncIterator([NEW_TWEET])
-    },
+      subscribe: withFilter(
+        ()=> pubsub.asyncIterator([NEW_TWEET]),
+        (payload,args)=>{
+          return (payload.forUID === args.id)
+        }
+        )
+      },
     tweetDeleteSub:{
       subscribe: ()=> pubsub.asyncIterator([DELETE_TWEET])
     }
@@ -129,10 +133,10 @@ const resolvers = {
 userActivityWebhook.on("event", function(event, userId, data) {
     if(event == 'tweet_create'){
       console.log(data);
-      pubsub.publish(NEW_TWEET, { tweetCreateSub: data });
+      pubsub.publish(NEW_TWEET, { tweetCreateSub: data, forUID: userId });
     }
     else if(event == 'tweet_delete'){
-      pubsub.publish(DELETE_TWEET, { tweetDeleteSub: data.status });
+      pubsub.publish(DELETE_TWEET, { tweetDeleteSub: data.status, forUID: userId });
     }
     });
 
