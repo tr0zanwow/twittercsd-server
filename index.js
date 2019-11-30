@@ -120,7 +120,7 @@ const resolvers = {
       subscribe: withFilter(
         ()=> pubsub.asyncIterator([NEW_TWEET]),
         (payload,args)=>{
-          return (payload.forUID === args.id)
+          return (payload.forUID === args.id_str)
         }
         )
       },
