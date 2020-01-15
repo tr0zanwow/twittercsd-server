@@ -5,6 +5,8 @@ const typeDefs = gql`
       search(query: String!,count: Int!): [Tweets] 
       user(identifier: IdentityType!, value: String!): User
       getTimeline(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
+      getUserList(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
+
       }
     type Mutation {
       postTweet(statusText: String!, inReplyToID: String!, access_token: String!, access_token_secret: String!): Tweets

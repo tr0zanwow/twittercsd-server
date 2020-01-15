@@ -49,6 +49,20 @@ const resolvers = {
         return searchData;
       }
     },
+    getUserList:{
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          twitInstance.get(
+            "search/tweets",
+            { q: args.query, count: args.count, tweet_mode: "extended" },
+            (err, data, response) => resolve(data.statuses)
+          );
+        });
+        const searchData = await promise;
+        const sortedUsers = searchData.search.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+        return sortedUsers;
+      }
+    },
     getTimeline: {
       async resolve(_, args) {
         let promise = new Promise((resolve, reject) => {
