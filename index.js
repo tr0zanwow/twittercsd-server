@@ -59,7 +59,7 @@ const resolvers = {
           );
         });
         const searchData = await promise;
-        const sortedUsers = searchData.search.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+        const sortedUsers = searchData.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
         return sortedUsers;
       }
     },
