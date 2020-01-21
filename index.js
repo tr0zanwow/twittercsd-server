@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const twitterWebhooks = require("twitter-webhooks");
-const { ApolloServer, PubSub, withFilter } = require("apollo-server-express");
+const { ApolloServer, PubSub, withFilter, ApolloError } = require("apollo-server-express");
 const typeDefs = require("./schemas.js");
 const cors = require("cors");
 const twitInstance = require("./twitInstance");
