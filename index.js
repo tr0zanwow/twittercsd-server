@@ -54,12 +54,12 @@ const resolvers = {
           twitInstance.get(
             "search/tweets",
             { q: args.query, count: args.count, tweet_mode: "extended" , max_id : max_id},
-            (err, data, response) => resolve(data.statuses)
+            (err, data, response) => resolve(data)
           );
         });
         const searchData = await promise;
-        const sortedUsers = searchData.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
-        max_id = data.search_metadata.next_results.split('=')[1].split('&')[0]
+        const sortedUsers = searchData.statuses.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+        max_id = searchData.search_metadata.next_results.split('=')[1].split('&')[0]
         return sortedUsers;
       }
     },
