@@ -9,9 +9,8 @@ const app = express();
 const Twit = require('twit');
 const https = require("https");
 const http = require('http');
-
+var max_id;
 const pubsub = new PubSub();
-
 const NEW_TWEET = 'NEW_TWEET';
 const DELETE_TWEET = 'DELETE_TWEET';
 
@@ -54,12 +53,13 @@ const resolvers = {
         let promise = new Promise((resolve, reject) => {
           twitInstance.get(
             "search/tweets",
-            { q: args.query, count: args.count, tweet_mode: "extended" },
+            { q: args.query, count: args.count, tweet_mode: "extended" , max_id : max_id},
             (err, data, response) => resolve(data.statuses)
           );
         });
         const searchData = await promise;
         const sortedUsers = searchData.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+        max_id = data.search_metadata.next_results.split('=')[1].split('&')[0]
         return sortedUsers;
       }
     },
