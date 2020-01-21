@@ -59,7 +59,7 @@ const resolvers = {
         });
         const searchData = await promise;
         if(searchData.search_metadata.next_results == null){
-          throw new graphQLErrors('no more data found')
+          throw new ApolloError("No Data Found");
           // console.log('no more data found')
         }
         else{
