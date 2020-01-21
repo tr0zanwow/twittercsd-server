@@ -58,9 +58,15 @@ const resolvers = {
           );
         });
         const searchData = await promise;
-        const sortedUsers = searchData.statuses.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
-        max_id = searchData.search_metadata.next_results.split('=')[1].split('&')[0]
-        return sortedUsers;
+        if(searchData.search_metadata.next_results == null){
+          throw new graphQLErrors('no more data found')
+          // console.log('no more data found')
+        }
+        else{
+          const sortedUsers = searchData.statuses.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+          max_id = searchData.search_metadata.next_results.split('=')[1].split('&')[0]
+          return sortedUsers;
+        }
       }
     },
     getTimeline: {
