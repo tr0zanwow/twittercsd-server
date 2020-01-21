@@ -65,8 +65,12 @@ const resolvers = {
         }
         else{
           const sortedUsers = searchData.statuses.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
-          // max_id = searchData.search_metadata.next_results.split('=')[1].split('&')[0]
-          return sortedUsers;
+          var max_id = searchData.search_metadata.next_results.split('=')[1].split('&')[0]
+          var finalResult = {
+            "max_id": max_id,
+            "tweets": sortedUsers
+          }
+          return finalResult;
         }
       }
     },

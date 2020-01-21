@@ -5,7 +5,7 @@ const typeDefs = gql`
       search(query: String!,count: Int!): [Tweets] 
       user(identifier: IdentityType!, value: String!): User
       getTimeline(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
-      getUserList(query: String!,count: Int!,max_id: String!): [Tweets]
+      getUserList(query: String!,count: Int!,max_id: String!): customTweetObj
 
       }
     type Mutation {
@@ -49,6 +49,11 @@ const typeDefs = gql`
       full_text: String
       in_reply_to_status_id_str: String
       user: User
+    }
+
+    type customTweetObj{
+      tweets: [Tweets]
+      max_id: String
     }
 
     schema {
