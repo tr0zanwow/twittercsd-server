@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
     type Query { 
-      search(query: String!,count: Int!): [Tweets] 
+      getTweetsFromUser(query: String!,count: Int!): [Tweets] 
       user(identifier: IdentityType!, value: String!): User
       getTimeline(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
       getUserList(query: String!,count: Int!,max_id: String!): customTweetObj

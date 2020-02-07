@@ -34,7 +34,7 @@ const userActivityWebhook = twitterWebhooks.userActivity({
 
 const resolvers = {
   Query: {
-    search: {
+    getTweetsFromUser: {
       async resolve(_, args) {
         let promise = new Promise((resolve, reject) => {
           twitInstance.get(
