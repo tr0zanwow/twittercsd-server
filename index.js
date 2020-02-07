@@ -1,28 +1,29 @@
-const express = require('express');
-const bodyParser = require ('body-parser');
-const twitterWebhooks = require('twitter-webhooks');
-const { ApolloServer } = require('apollo-server-express');
-const typeDefs = require('./schemas.js')
-const resolvers = require('./resolvers.js')
-const cors = require('cors')
+const express = require("express");
+const bodyParser = require("body-parser");
+const twitterWebhooks = require("twitter-webhooks");
+const { ApolloServer, PubSub, withFilter, ApolloError } = require("apollo-server-express");
+const typeDefs = require("./schemas.js");
+const cors = require("cors");
+const twitInstance = require("./twitInstance");
 const app = express();
-const socket = require('socket.io')
+const Twit = require('twit');
 const https = require("https");
-var users = [];
+const http = require('http');
+const pubsub = new PubSub();
+const NEW_TWEET = 'NEW_TWEET';
+const DELETE_TWEET = 'DELETE_TWEET';
 
 setInterval(function() {
   https.get("https://apollo-graphql-socket-node.herokuapp.com/");
 }, 300000);
 
-const server = new ApolloServer({ typeDefs, resolvers, introspection: true, playground: true });
-
 app.use(bodyParser.json());
 
-app.use(cors({ origin: '*'}));
+app.use(cors());
 
 const userActivityWebhook = twitterWebhooks.userActivity({
-  serverUrl: 'https://'+process.env.HEROKU_APP_NAME+'.herokuapp.com',
-  route: '/twitter',
+  serverUrl: "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com",
+  route: "/twitter",
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
   accessToken: process.env.TWITTER_ACCESS_TOKEN,
@@ -31,59 +32,162 @@ const userActivityWebhook = twitterWebhooks.userActivity({
   app
 });
 
-server.applyMiddleware({ app });
+const resolvers = {
+  Query: {
+    search: {
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          twitInstance.get(
+            "search/tweets",
+            { q: args.query, count: args.count, tweet_mode: "extended" },
+            (err, data, response) => resolve(data.statuses)
+          );
+        });
+        const searchData = await promise;
+        return searchData;
+      }
+    },
+    getTweet:{
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          twitInstance.get(
+            "statuses/show",
+            { id: args.id_str, trim_user: true },
+            (err, data, response) => resolve(data)
+          );
+        });
+        const tweetData = await promise;
+        return tweetData;
+      }
+    },
+    getUserList:{
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          twitInstance.get("search/tweets",
+            { q: args.query, count: args.count, tweet_mode: "extended" , max_id : args.max_id},
+            (err, data, response) => resolve(data)
+          );
+        });
+        
+        const searchData = await promise;
+        if(searchData.search_metadata.next_results == null){
+          if(searchData.statuses != [])
+          return searchData.statuses.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+          else
+          return [];
+        }
+        else{
+          const sortedUsers = searchData.statuses.filter((set => f => !set.has(f.user.id_str) && set.add(f.user.id_str))(new Set));
+          var max_id = searchData.search_metadata.next_results.split('=')[1].split('&')[0]
+          var finalResult = {
+            "max_id": max_id,
+            "tweets": sortedUsers
+          }
+          return finalResult;
+        }
+      }
+    },
+    getTimeline: {
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          const tClient = new Twit({
+            consumer_key: process.env.TWITTER_CONSUMER_KEY,
+            consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+            access_token: args.access_token,
+            access_token_secret: args.access_token_secret,
+            timeout_ms: 60 * 1000,
+            strictSSL: true
+          });
+          tClient.get(
+            "statuses/user_timeline",
+            {
+              [args.identifier]: args.value,
+              count: args.count,
+              tweet_mode: "extended"
+            },
+            (err, data, response) => resolve(data)
+          );
+        });
+        const timeLineData = await promise;
+        console.log(timeLineData);
+        return timeLineData;
+      }
+    },
+    user: {
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          twitInstance.get(
+            "users/show",
+            { [args.identifier]: args.value },
+            (err, data, response) => resolve(data)
+          );
+        });
+        const getUserData = await promise;
+        return getUserData;
+      }
+    }
+  },
+  Mutation: {
+    postTweet: {
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          const tClient = new Twit({
+            consumer_key: process.env.TWITTER_CONSUMER_KEY,
+            consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+            access_token: args.access_token,
+            access_token_secret: args.access_token_secret,
+            timeout_ms: 60 * 1000,
+            strictSSL: true
+          });
+          tClient.post(
+            "statuses/update",
+            {
+              status: args.statusText,
+              in_reply_to_status_id: args.inReplyToID
+            },
+            (err, data, response) => resolve(data)
+          );
+        });
+        const postTweetResponse = await promise;
+        return postTweetResponse;
+      }
+    }
+  },
+  Subscription:{
+    tweetCreateSub: {
+      subscribe: withFilter(
+        ()=> pubsub.asyncIterator([NEW_TWEET]),
+        (payload,args)=>{
+          return (payload.forUID === args.id_str)
+        }
+        )
+      },
+    tweetDeleteSub:{
+      subscribe: ()=> pubsub.asyncIterator([DELETE_TWEET])
+    }
+  }
+};
 
-const PORT = process.env.PORT || 4000;
-const expressServer = app.listen(PORT, () => {
-  let host = expressServer.address().address;
-  let port = expressServer.address().port;
+userActivityWebhook.on("event", function(event, userId, data) {
+    if(event == 'tweet_create'){
+      console.log(data);
+      pubsub.publish(NEW_TWEET, { tweetCreateSub: data, forUID: userId });
+    }
+    else if(event == 'tweet_delete'){
+      pubsub.publish(DELETE_TWEET, { tweetDeleteSub: data.status, forUID: userId });
+    }
+    });
 
-  console.log(`Listening at http://${host}:${port}`);
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  introspection: true,
+  playground: true
 });
 
-var io = socket(expressServer);
+server.applyMiddleware({ app });
 
-io.on('connection', (socket) => {
-  console.log('Client connected on socket with ID:', socket.id);
-  
-  userActivityWebhook.on('event',function (event, userId, data){ 
-    if(users.find(x => x.twitterID === userId)){
-      var tempIndx = users.findIndex(x => x.twitterID === userId);
-      
-      console.log(event)
-      io.to(users[tempIndx].socketID).emit('eventOccured',event);
-      // io.to(users[tempIndx].socketID).emit('normalizedUserData',tweetUserNormalized);
-    }
-  });
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
-  socket.on('disconnect',function(){
-    console.log('Client disconnected with ID:', socket.id);
-  });
-
-  socket.on('creds',function(data){
-    const temp = {
-      socketID : socket.id,
-      twitterID : data.userTwitterId,
-      accessToken : data.access_token,
-      accessTokenSecret : data.access_secret
-    }
-    if(users.find(x => x.twitterID === data.userTwitterId)){
-      var index1 = users.findIndex(x => x.twitterID === data.userTwitterId);
-      users[index1] = temp;
-  }
-  else{
-      users.push(temp)
-  }
-    console.log(users);
-
-    (async function() {
-      await userActivityWebhook.subscribe({
-        userId: data.userTwitterId,
-        accessToken: data.access_token,
-        accessTokenSecret: data.access_secret
-    }).then(function (userActivity) {});
-  })();
-
-  });
-  
-  });
+httpServer.listen(process.env.PORT || 4000, () => {})

@@ -5,14 +5,27 @@ const typeDefs = gql`
       search(query: String!,count: Int!): [Tweets] 
       user(identifier: IdentityType!, value: String!): User
       getTimeline(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
+      getUserList(query: String!,count: Int!,max_id: String!): customTweetObj
+      getTweet(id_str: String!): Tweets
+
       }
     type Mutation {
       postTweet(statusText: String!, inReplyToID: String!, access_token: String!, access_token_secret: String!): Tweets
     }
 
+    type Subscription{
+      tweetCreateSub(id_str:String): Tweets
+      tweetDeleteSub(id_str:String): Status
+    }
+
     enum IdentityType{
       user_id
       screen_name
+    }
+
+    type Status{
+      id: String
+      user_id: String
     }
 
     type User {
@@ -39,9 +52,15 @@ const typeDefs = gql`
       user: User
     }
 
+    type customTweetObj{
+      tweets: [Tweets]
+      max_id: String
+    }
+
     schema {
       query: Query
       mutation: Mutation
+      subscription: Subscription
 }
   `;
 
