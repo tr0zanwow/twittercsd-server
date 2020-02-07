@@ -47,6 +47,19 @@ const resolvers = {
         return searchData;
       }
     },
+    getTweet:{
+      async resolve(_, args) {
+        let promise = new Promise((resolve, reject) => {
+          twitInstance.get(
+            "statuses/show",
+            { id: args.id_str, trim_user: true },
+            (err, data, response) => resolve(data)
+          );
+        });
+        const tweetData = await promise;
+        return tweetData;
+      }
+    },
     getUserList:{
       async resolve(_, args) {
         let promise = new Promise((resolve, reject) => {

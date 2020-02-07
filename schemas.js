@@ -6,6 +6,7 @@ const typeDefs = gql`
       user(identifier: IdentityType!, value: String!): User
       getTimeline(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
       getUserList(query: String!,count: Int!,max_id: String!): customTweetObj
+      getTweet(id_str: String!) Tweets
 
       }
     type Mutation {
