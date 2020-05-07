@@ -1,4 +1,3 @@
-const express = require("express");
 const bodyParser = require("body-parser");
 const webhooksInstance = require("./twitter/modules/webhook");
 const { ApolloServer, pubsub, expressApp } = require("./graphql/apolloServer");
