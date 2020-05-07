@@ -2,9 +2,9 @@
   "name": "apollo-graphql-server-node",
   "version": "1.0.0",
   "description": "Websocket-Subscription Based Apollo GraphQL Server For Twitter API",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "serve": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
