@@ -1,11 +1,10 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const webhooksInstance = require("./twitter/modules/webhook");
-const { ApolloServer, pubsub } = require("./graphql/apolloServer");
+const { ApolloServer, pubsub, expressApp } = require("./graphql/apolloServer");
 const typeDefs = require("./graphql/schemas");
 const resolvers = require("./graphql/resolvers");
 const cors = require("cors");
-const app = express();
 const https = require("https");
 const http = require('http');
 const NEW_TWEET = 'NEW_TWEET';
@@ -15,9 +14,9 @@ setInterval(function() {
   https.get("https://apollo-graphql-socket-node.herokuapp.com/");
 }, 300000);
 
-app.use(bodyParser.json());
+expressApp.use(bodyParser.json());
 
-app.use(cors());
+expressApp.use(cors());
 
 webhooksInstance.on("event", function(event, userId, data) {
     if(event == 'tweet_create'){
@@ -36,9 +35,9 @@ const server = new ApolloServer({
   playground: true
 });
 
-server.applyMiddleware({ app });
+server.applyMiddleware({ expressApp });
 
-const httpServer = http.createServer(app);
+const httpServer = http.createServer(expressApp);
 server.installSubscriptionHandlers(httpServer);
 
 httpServer.listen(process.env.PORT || 4000, () => {})
