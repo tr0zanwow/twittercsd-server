@@ -1,5 +1,5 @@
 const webhooksInstance = require("twitter-webhooks");
-const { expressApp } = require("../../graphql/apolloServer");
+const { app } = require("../../graphql/apolloServer");
 
 const userActivityWebhook = webhooksInstance.userActivity({
     serverUrl: "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com",
@@ -9,7 +9,7 @@ const userActivityWebhook = webhooksInstance.userActivity({
     accessToken: process.env.TWITTER_ACCESS_TOKEN,
     accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
     environment: process.env.TWITTER_DEV_ENVIRONMENT,
-    expressApp
+    app
   });
 
 module.exports = userActivityWebhook;
