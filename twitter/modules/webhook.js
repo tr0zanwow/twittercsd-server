@@ -1,5 +1,5 @@
 const webhooksInstance = require("twitter-webhooks");
-const { expressApp } = require("./graphql/apolloServer");
+const { expressApp } = require("../../graphql/apolloServer");
 
 const userActivityWebhook = webhooksInstance.userActivity({
     serverUrl: "https://" + process.env.HEROKU_APP_NAME + ".herokuapp.com",
