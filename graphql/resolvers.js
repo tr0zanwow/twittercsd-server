@@ -1,6 +1,6 @@
-const twitInstance = require("./twitter/modules/twitInstance");
+const twitInstance = require("../twitter/modules/twitInstance");
 const Twit = require('twit');
-const { pubsub, withFilter } = require("./graphql/apolloServer");
+const { pubsub, withFilter } = require("../graphql/apolloServer");
 
 const resolvers = {
     Query: {
