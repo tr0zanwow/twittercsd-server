@@ -20,7 +20,7 @@ const resolvers = {
       getTweets:{
         async resolve(_,args){
           let custTweetObjProm = new Promise((resolve, reject) => {
-            T.get('search/tweets', { q: 'to:'+args.to+ ' from:'+args.from, max_id: args.max_id, result_type: 'mixed', tweet_mode: "extended", count: 10 }, function(err, data, response) {
+            twitInstance.get('search/tweets', { q: 'to:'+args.to+ ' from:'+args.from, max_id: args.max_id, result_type: 'mixed', tweet_mode: "extended", count: 10 }, function(err, data, response) {
               var tweetsWithReplies = [];
               data.statuses.forEach(tweet => {
                 var replyTweets = [];
@@ -28,7 +28,7 @@ const resolvers = {
                 var dateStr = myDate.toLocaleString().split(",")[0].split("/");
                 var date = dateStr[2]+"-"+dateStr[0]+"-"+dateStr[1];
             
-                T.get('search/tweets', { q: 'to:'+args.from+ ' from:'+args.to+' since:'+date,result_type: 'mixed',tweet_mode: "extended", count: 100 }, function(err, data, response) {
+                twitInstance.get('search/tweets', { q: 'to:'+args.from+ ' from:'+args.to+' since:'+date,result_type: 'mixed',tweet_mode: "extended", count: 100 }, function(err, data, response) {
                   if(data.statuses.length){
                     data.statuses.forEach(tweetReply =>{
                       if(tweet.id_str === tweetReply.in_reply_to_status_id_str){
