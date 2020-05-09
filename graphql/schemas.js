@@ -60,7 +60,14 @@ const typeDefs = gql`
 
     type getTweetsCustom{
       max_id: String,
-      data: [Tweets]
+      data: [custGetTweets]
+    }
+
+    type custGetTweets{
+      id_str: String
+      created_at: String
+      full_text: String
+      replies: [custGetTweets]
     }
 
     schema {
