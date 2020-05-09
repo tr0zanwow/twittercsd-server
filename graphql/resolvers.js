@@ -17,6 +17,51 @@ const resolvers = {
           return searchData;
         }
       },
+      getTweets:{
+        async resolve(_,args){
+          let custTweetObjProm = new Promise((resolve, reject) => {
+            T.get('search/tweets', { q: 'to:'+args.to+ ' from:'+args.from, max_id: args.max_id, result_type: 'mixed', tweet_mode: "extended", count: 10 }, function(err, data, response) {
+              var tweetsWithReplies = [];
+              data.statuses.forEach(tweet => {
+                var replyTweets = [];
+                var myDate = new Date(tweet.created_at);
+                var dateStr = myDate.toLocaleString().split(",")[0].split("/");
+                var date = dateStr[2]+"-"+dateStr[0]+"-"+dateStr[1];
+            
+                T.get('search/tweets', { q: 'to:'+args.from+ ' from:'+args.to+' since:'+date,result_type: 'mixed',tweet_mode: "extended", count: 100 }, function(err, data, response) {
+                  if(data.statuses.length){
+                    data.statuses.forEach(tweetReply =>{
+                      if(tweet.id_str === tweetReply.in_reply_to_status_id_str){
+                        var tempStruct = {
+                              id_str: tweetReply.id_str,
+                              full_text: tweetReply.full_text,
+                              created_at: tweetReply.created_at
+                            }
+                            replyTweets.push(tempStruct)
+                      }
+                    })
+                  }
+              })
+              var tempGroup = {
+                id_str: tweet.id_str,
+                created_at: tweet.created_at,
+                full_text: tweet.full_text,
+                replies: replyTweets
+              }
+                tweetsWithReplies.push(tempGroup)
+              });
+              var newTweetObj = {
+                max_id: data.search_metadata.next_results.split('=')[1].split('&')[0],
+                data : tweetsWithReplies
+              }
+              resolve(newTweetObj)
+          })
+          })
+
+          const custTweetData = await custTweetObjProm;
+          return custTweetData;
+        }
+      },
       getTweet:{
         async resolve(_, args) {
           let promise = new Promise((resolve, reject) => {
