@@ -21,6 +21,7 @@ const resolvers = {
         async resolve(_,args){
           let custTweetObjProm = new Promise((resolve, reject) => {
             twitInstance.get('search/tweets', { q: 'to:'+args.to+ ' from:'+args.from, max_id: args.max_id, result_type: 'mixed', tweet_mode: "extended", count: 10 }, function(err, data, response) {
+              if(data.statuses.length || data.statuses.length && data.search_metadata.next_results == null){
               var tweetsWithReplies = [];
               data.statuses.forEach(tweet => {
                 var replyTweets = [];
@@ -55,6 +56,14 @@ const resolvers = {
                 data : tweetsWithReplies
               }
               resolve(newTweetObj)
+            }
+            else if(data.search_metadata.next_results == null && data.statuses.length == 0){
+              var newTweetObj = {
+                max_id: null,
+                data : []
+              }
+              resolve(newTweetObj)
+            }
           })
           })
 
