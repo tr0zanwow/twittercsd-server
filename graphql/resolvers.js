@@ -137,7 +137,7 @@ const resolvers = {
           return timeLineData;
         }
       },
-      user: {
+      getUserInfo: {
         async resolve(_, args) {
           let promise = new Promise((resolve, reject) => {
             twitInstance.get(

@@ -4,7 +4,7 @@ const typeDefs = gql`
     type Query { 
       getTweetsFromUser(query: String!,count: Int!): [Tweets] 
       getTweets(from: String!, to: String!, max_id: String!): getTweetsCustom
-      user(identifier: IdentityType!, value: String!): User
+      getUserInfo(identifier: IdentityType!, value: String!): User
       getTimeline(identifier: IdentityType!,identity: String! count: Int!,access_token: String!, access_token_secret: String!): [Tweets]
       getUserList(query: String!,count: Int!,max_id: String!): customTweetObj
       getTweet(id_str: String!): Tweets
